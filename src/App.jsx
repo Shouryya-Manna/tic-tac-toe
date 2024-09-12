@@ -1,8 +1,8 @@
-import Mycomponent from './Mycomponent.jsx';
+import TicTacToe from "./Components/TicTacToe/TicTacToe"
 function App() {
   return (
     <>
-      <Mycomponent/>
+      <TicTacToe/>
     </>
   )
 }
