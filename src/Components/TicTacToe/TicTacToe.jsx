@@ -2,13 +2,22 @@ import React, { useState } from "react";
 import Box from "./Box";
 function TicTacToe() {
 
+  const [player,setPlayer] = useState("X");
+
   function handleShow(index){
-    let updatedBoard = [...board]
-    updatedBoard[index]="X";
+    let updatedBoard = [...board];
+    updatedBoard[index]=player;
     setBoard(updatedBoard);
+    if(player=="X"){
+      setPlayer("O");
+    }
+    else{
+      setPlayer("X");
+    }
   }
-    
-    const [board,setBoard] = useState([null, null, null, null, null, null, null, null, null]);
+
+
+  const [board,setBoard] = useState([null, null, null, null, null, null, null, null, null]);
     return (
       <div className='flex flex-col justify-center items-center'>
         <h1 className="text-5xl mt-[100px]">Tic Tac Toe</h1>
