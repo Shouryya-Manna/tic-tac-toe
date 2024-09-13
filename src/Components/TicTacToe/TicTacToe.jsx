@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Box from "./Box";
 function TicTacToe() {
-
   const [board, setBoard] = useState([
     null,
     null,
@@ -13,13 +11,17 @@ function TicTacToe() {
     null,
     null,
   ]);
-  const [player, setPlayer] = useState("X");
+  const [turn, setTurn] = useState("X");
   const [winningLine, setWinningLine] = useState([]);
-  const [won,setWon] = useState(0);
+  const [won, setWon] = useState(false);
+  const [draw, setDraw] = useState(false);
 
   useEffect(() => {
     winCondition();
+    drawCondition();
   }, [board]);
+
+
 
   function winCondition() {
     const win = [
@@ -44,23 +46,27 @@ function TicTacToe() {
           board[win[i][2]] == "O")
       ) {
         setWinningLine(win[i]);
-        setWon(1);
+        setWon(true);
       }
     }
   }
 
+  function drawCondition() {
+    if (board.every(cell => cell !== null) && !won) {
+      setDraw(true);
+    }
+  }
+
   function handleShow(index) {
-    let updatedBoard = [...board];
-    updatedBoard[index] = player;
-    if (won == 0) {
-      setBoard(updatedBoard);
+    if (board[index] || won==true || draw ==true) {
+      return;
     }
 
-    if (player == "X") {
-      setPlayer("O");
-    } else {
-      setPlayer("X");
-    }
+    const updatedBoard = [...board];
+    updatedBoard[index] = turn;
+    setBoard(updatedBoard);
+
+    setTurn(turn === "X" ? "O" : "X");
   }
 
   return (
@@ -69,8 +75,8 @@ function TicTacToe() {
       <div className="items-center mt-[100px] grid gap-3 grid-cols-3 grid-rows-3 ">
         {board.map((value, index) => (
           <div
-            className={`flex w-[100px] h-[100px] border-2 justify-center items-center 
-              ${winningLine.includes(index) ? "bg-green-200" : ""} `}
+            className={`flex w-[100px] h-[100px] border-2 border-stone-700 rounded-[20px] text-5xl justify-center items-center cursor-pointer transition ease-in duration-500
+              ${winningLine.includes(index) ? "bg-green-300" : ""} `}
             key={index}
             onClick={() => handleShow(index)}
           >
@@ -78,6 +84,8 @@ function TicTacToe() {
           </div>
         ))}
       </div>
+      {won && <div className="mt-10 text-2xl text-green-500">turn {turn === "X"  ? "O" : "X"} Wins!</div>}
+      {draw && <div className="mt-10 text-2xl text-red-500">It's a Draw!</div>}
     </div>
   );
 }
